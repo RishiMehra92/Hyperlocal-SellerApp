@@ -1,0 +1,239 @@
+--- lib/screen/order_page/model/order_model.dart
++++ lib/screen/order_page/model/order_model.dart
+@@ -74,27 +74,27 @@
+ 
+ class SellerOrderItem {
+   int orderItemId;
+   int sellerOrderId;
+   String createdAt;
+-  OrderInfo order;
+-  ProductInfo product;
+-  StoreInfo store;
+-  String sku;
+-  int quantity;
+-  SubtotalInfo subtotal;
++  bool isRushOrder;
++  String? deliveryType;
++  String? scheduledDate;
++  int? deliveryTimeSlotId;
++  String? scheduledTimeSlotLabel;
++  String? rescheduleStatus;
++  String? rescheduleReason;
++  String? rescheduleDeadline;
+   String status;
+   AcceptanceTimeout? acceptanceTimeout;
++  num finalTotal;
++  List<OrderItemData> items;
+ 
+   SellerOrderItem({
+     required this.orderItemId,
+     required this.sellerOrderId,
+     required this.createdAt,
+-    required this.order,
+-    required this.product,
+-    required this.store,
+-    required this.sku,
+-    required this.quantity,
+-    required this.subtotal,
++    required this.isRushOrder,
++    this.deliveryType,
++    this.scheduledDate,
++    this.deliveryTimeSlotId,
++    this.scheduledTimeSlotLabel,
++    this.rescheduleStatus,
++    this.rescheduleReason,
++    this.rescheduleDeadline,
+     required this.status,
+     this.acceptanceTimeout,
++    required this.finalTotal,
++    required this.items,
+   });
+ 
+   factory SellerOrderItem.fromJson(Map<String, dynamic> json) {
+     return SellerOrderItem(
+-      orderItemId: JsonParser.requireInt(
+-        json['order_item_id'],
+-        model: modelName,
+-        field: 'order_item_id',
+-      ),
+-      sellerOrderId: JsonParser.requireInt(
+-        json['seller_order_id'],
+-        model: modelName,
+-        field: 'seller_order_id',
+-      ),
++      orderItemId: JsonParser.intValue(json['id']),
++      sellerOrderId: JsonParser.intValue(json['order_id']),
+       createdAt: JsonParser.string(json['created_at'] ?? ''),
+-
+-      order: json['order'] != null
+-          ? OrderInfo.fromJson(json['order'] as Map<String, dynamic>)
+-          : OrderInfo(), // fallback empty
+-
+-      product: json['product'] != null
+-          ? ProductInfo.fromJson(json['product'] as Map<String, dynamic>)
+-          : ProductInfo(),
+-
+-      store: json['store'] != null
+-          ? StoreInfo.fromJson(json['store'] as Map<String, dynamic>)
+-          : StoreInfo(),
+-
+-      sku: JsonParser.requireString(
+-        json['sku'],
+-        model: modelName,
+-        field: 'sku',
+-      ),
+-
+-      quantity: JsonParser.intValue(json['quantity'] ?? 1),
+-
+-      subtotal: json['subtotal'] != null
+-          ? SubtotalInfo.fromJson(json['subtotal'] as Map<String, dynamic>)
+-          : SubtotalInfo(),
+-
++      isRushOrder: JsonParser.intValue(json['is_rush_order']) == 1 || JsonParser.boolValue(json['is_rush_order']),
++      deliveryType: JsonParser.string(json['delivery_type']),
++      scheduledDate: json['scheduled_date'] != null ? JsonParser.string(json['scheduled_date']) : null,
++      deliveryTimeSlotId: json['delivery_time_slot_id'] != null ? JsonParser.intValue(json['delivery_time_slot_id']) : null,
++      scheduledTimeSlotLabel: json['scheduled_time_slot_label'] != null ? JsonParser.string(json['scheduled_time_slot_label']) : null,
++      rescheduleStatus: json['reschedule_status'] != null ? JsonParser.string(json['reschedule_status']) : null,
++      rescheduleReason: json['reschedule_reason'] != null ? JsonParser.string(json['reschedule_reason']) : null,
++      rescheduleDeadline: json['reschedule_deadline'] != null ? JsonParser.string(json['reschedule_deadline']) : null,
+       status: JsonParser.string(json['status'] ?? 'pending'),
+-
+       acceptanceTimeout: json['acceptance_timeout'] != null
+           ? AcceptanceTimeout.fromJson(
+               json['acceptance_timeout'] as Map<String, dynamic>,
+             )
+           : null,
++      finalTotal: JsonParser.doubleValue(json['final_total'] ?? json['total_price'] ?? 0),
++      items: JsonParser.list<OrderItemData>(
++        json['items'],
++        (v) => OrderItemData.fromJson(v as Map<String, dynamic>),
++      ),
+     );
+   }
+ 
+   Map<String, dynamic> toJson() {
+     final Map<String, dynamic> data = <String, dynamic>{};
+     data['order_item_id'] = orderItemId;
+     data['seller_order_id'] = sellerOrderId;
+     data['created_at'] = createdAt;
+-    data['order'] = order.toJson();
+-    data['product'] = product.toJson();
+-    data['store'] = store.toJson();
+-    data['sku'] = sku;
+-    data['quantity'] = quantity;
+-    data['subtotal'] = subtotal.toJson();
++    data['is_rush_order'] = isRushOrder;
++    data['delivery_type'] = deliveryType;
++    data['scheduled_date'] = scheduledDate;
++    data['delivery_time_slot_id'] = deliveryTimeSlotId;
++    data['scheduled_time_slot_label'] = scheduledTimeSlotLabel;
++    data['reschedule_status'] = rescheduleStatus;
++    data['reschedule_reason'] = rescheduleReason;
++    data['reschedule_deadline'] = rescheduleDeadline;
+     data['status'] = status;
++    data['final_total'] = finalTotal;
++    data['items'] = items.map((e) => e.toJson()).toList();
++    if (acceptanceTimeout != null) {
++      data['acceptance_timeout'] = acceptanceTimeout!.toJson();
++    }
+     return data;
+   }
+ 
+   SellerOrderItem copyWith({
+-    int? orderItemId,
+-    int? sellerOrderId,
+-    String? createdAt,
+-    OrderInfo? order,
+-    ProductInfo? product,
+-    StoreInfo? store,
+-    String? sku,
+-    int? quantity,
+-    SubtotalInfo? subtotal,
+     String? status,
+-    AcceptanceTimeout? acceptanceTimeout,
+   }) {
+     return SellerOrderItem(
+-      orderItemId: orderItemId ?? this.orderItemId,
+-      sellerOrderId: sellerOrderId ?? this.sellerOrderId,
+-      createdAt: createdAt ?? this.createdAt,
+-      order: order ?? this.order,
+-      product: product ?? this.product,
+-      store: store ?? this.store,
+-      sku: sku ?? this.sku,
+-      quantity: quantity ?? this.quantity,
+-      subtotal: subtotal ?? this.subtotal,
++      orderItemId: orderItemId,
++      sellerOrderId: sellerOrderId,
++      createdAt: createdAt,
++      isRushOrder: isRushOrder,
++      deliveryType: deliveryType,
++      scheduledDate: scheduledDate,
++      deliveryTimeSlotId: deliveryTimeSlotId,
++      scheduledTimeSlotLabel: scheduledTimeSlotLabel,
++      rescheduleStatus: rescheduleStatus,
++      rescheduleReason: rescheduleReason,
++      rescheduleDeadline: rescheduleDeadline,
+       status: status ?? this.status,
+-      acceptanceTimeout: acceptanceTimeout ?? this.acceptanceTimeout,
++      acceptanceTimeout: acceptanceTimeout,
++      finalTotal: finalTotal,
++      items: items,
+     );
+   }
+ }
++
++class OrderItemData {
++  final int id;
++  final String title;
++  final num price;
++  final int quantity;
++  final List<String> images;
++
++  OrderItemData({
++    required this.id,
++    required this.title,
++    required this.price,
++    required this.quantity,
++    required this.images,
++  });
++
++  factory OrderItemData.fromJson(Map<String, dynamic> json) {
++    String title = '';
++    if (json['product'] != null) {
++      title = JsonParser.string(json['product']['title'] ?? '');
++    }
++    
++    List<String> imgs = [];
++    if (json['product'] != null && json['product']['image'] != null) {
++      imgs.add(JsonParser.string(json['product']['image']));
++    }
++    if (json['attachments'] != null && json['attachments'] is List) {
++       for (var att in (json['attachments'] as List)) {
++           if (att is Map && att['url'] != null) {
++               imgs.add(att['url'].toString());
++           } else if (att is String) {
++               imgs.add(att);
++           }
++       }
++    }
++
++    return OrderItemData(
++      id: JsonParser.intValue(json['id'] ?? 0),
++      title: title,
++      price: JsonParser.doubleValue(json['price'] ?? json['sub_total'] ?? 0),
++      quantity: JsonParser.intValue(json['quantity'] ?? 1),
++      images: imgs,
++    );
++  }
++
++  Map<String, dynamic> toJson() {
++    return {
++      'id': id,
++      'title': title,
++      'price': price,
++      'quantity': quantity,
++      'images': images,
++    };
++  }
++}

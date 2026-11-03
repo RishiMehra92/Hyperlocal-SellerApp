@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none">
+  <!-- Book outline / left page -->
+  <path d="M10 25 C30 20, 45 28, 50 32 C55 28, 70 20, 90 25 L90 75 C70 70, 55 78, 50 82 C45 78, 30 70, 10 75 Z" stroke="currentColor" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Middle separator of book spine -->
+  <path d="M50 32 L50 82" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+  <!-- Pencil diagonally writing on the right page -->
+  <path d="M60 62 L85 37 L78 30 L53 55 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+  <!-- Pencil Tip -->
+  <path d="M53 55 L50 62 L57 59 Z" fill="currentColor"/>
+</svg>

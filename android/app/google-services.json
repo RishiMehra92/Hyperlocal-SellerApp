@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "720571855021",
+    "project_id": "nezit-merchant-7b717",
+    "storage_bucket": "nezit-merchant-7b717.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720571855021:android:7d2e33c01867ddb4689624",
+        "android_client_info": {
+          "package_name": "com.nezit.merchant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKQJ5GxtOUmMeFoyS3V_UqZfhs5liNlfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
